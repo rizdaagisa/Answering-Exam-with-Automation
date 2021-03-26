@@ -14,19 +14,13 @@ def main(so):
     # matkul = df.loc[df["soal"]  == str(so)]['matkul'][0]
     kunci = df.loc[df["soal"]  == str(so)]['kunci'][0]
     jawaban = df.loc[df["soal"]  == str(so)][kunci.lower()][0]
-    if(jawaban.empty):
-        return "Pass / Tidak menjawab"
-    else:
-        return jawaban
+    return jawaban
     # print(soal,matkul,kunci,jawaban)
 
 def search(data):
     kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)]['kunci'].values[0]
     jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)][kunci.lower()].values[0]
-    if(jawaban.empty):
-        return "Pass / Tidak menjawab"
-    else:
-        return jawaban
+    return jawaban
 
 @app.route('/',methods=['GET'])
 def index():
