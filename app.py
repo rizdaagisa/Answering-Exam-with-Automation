@@ -38,9 +38,11 @@ def kunci():
     soal = result['soal']
     try:
         jawaban  = main(soal)
-    except:
+    except Exception as e:
+        print(str(e))
         jawaban  = search(soal)
     finally:
+        print("finally")
         jawaban = "Pass / Tidak menjawab"
 
     return {'jawaban' : jawaban, 'status':'ok'}
