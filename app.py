@@ -1,6 +1,9 @@
 import pandas as pd
 from flask import Flask, jsonify, request , send_file
 
+app = Flask(__name__)
+path = os.path.dirname(__file__)
+path = path.replace("\\","/")
 df = pd.read_csv("DB_matkul.csv",low_memory=False,error_bad_lines=False,index_col=0,dtype={"soal": "string", "a": "string", "b": "string", "c": "string", "d": "string", "kunci": "string", "bobot": "string"})
 # df.drop(columns=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],axis=1, inplace=True)
 # df['d'] = df['d'].str.strip()
@@ -17,6 +20,9 @@ def search(data):
     jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)][kunci.lower()].values[0]
     return jawaban
 
+@app.route('/',methods=['GET'])
+def index():
+    return 'Upss mau iseng ya? Silakan hubungi admin untuk membeli program bot UM'
 
 @app.route('/kunci',methods=['POST'])
 def kunci():
