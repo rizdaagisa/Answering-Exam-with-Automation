@@ -10,16 +10,23 @@ df = pd.read_csv("DB_matkul.csv",low_memory=False,error_bad_lines=False,index_co
 # df['d'] = df['d'].str.strip()
 
 def main(so):
-    soal = df.loc[df["soal"]  == str(so)]['soal'][0]
-    matkul = df.loc[df["soal"]  == str(so)]['matkul'][0]
+    # soal = df.loc[df["soal"]  == str(so)]['soal'][0]
+    # matkul = df.loc[df["soal"]  == str(so)]['matkul'][0]
     kunci = df.loc[df["soal"]  == str(so)]['kunci'][0]
     jawaban = df.loc[df["soal"]  == str(so)][kunci.lower()][0]
-    print(soal,matkul,kunci,jawaban)
+    if(jawaban.empty):
+        return "Pass / Tidak menjawab"
+    else:
+        return jawaban
+    # print(soal,matkul,kunci,jawaban)
 
 def search(data):
-    kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)]['kunci'].values[0]
-    jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)][kunci.lower()].values[0]
-    return jawaban
+    kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)]['kunci'].values[0]
+    jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)][kunci.lower()].values[0]
+    if(jawaban.empty):
+        return "Pass / Tidak menjawab"
+    else:
+        return jawaban
 
 @app.route('/',methods=['GET'])
 def index():
@@ -29,7 +36,13 @@ def index():
 def kunci():
     result = request.get_json()
     soal = result['soal']
-    jawaban  = search(soal)
+    try:
+        jawaban  = main(soal)
+    except:
+        jawaban  = search(soal)
+    finally:
+        jawaban = "Pass / Tidak menjawab"
+
     return {'jawaban' : jawaban, 'status':'ok'}
 
 
