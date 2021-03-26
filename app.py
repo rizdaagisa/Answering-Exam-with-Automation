@@ -13,14 +13,8 @@ def main(so):
     print(soal,matkul,kunci,jawaban)
 
 def search(data):
-    # a = df.filter(like=f'{data}')
-    # b = df.loc[:, df.columns.str.contains(f'{data}')]
-    # c = df.loc[df['soal'].str.contains('{}|{}'.format("Satuan arus", "Ampere"),na=False,case=False,regex=True)]['soal']
     kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)]['kunci'].values[0]
     jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)][kunci.lower()].values[0]
-    # e =df[df['soal'].str.contains(r'{}|baz'.format(data))][0]
-    # f = df[df['soal'].str.contains(data, case=False)]
-    # g = df[df['soal'].str.contains(data)]
     return jawaban
 
 
