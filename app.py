@@ -18,9 +18,12 @@ def main(so):
     # print(soal,matkul,kunci,jawaban)
 
 def search(data):
-    kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)]['kunci'].values[0]
-    jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True)][kunci.lower()].values[0]
-    return jawaban
+    try:
+        kunci = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)]['kunci'].values[0]
+        jawaban = df.loc[df['soal'].str.contains(data, na=False,case=False,regex=True) | (df['soal'] == data)][kunci.lower()].values[0]
+        return jawaban
+    except:
+        return "Pass / Tidak menjawab"
 
 @app.route('/',methods=['GET'])
 def index():
@@ -30,15 +33,7 @@ def index():
 def kunci():
     result = request.get_json()
     soal = result['soal']
-    try:
-        jawaban  = main(soal)
-    except Exception as e:
-        print(str(e))
-        jawaban  = search(soal)
-    finally:
-        print("finally")
-        jawaban = "Pass / Tidak menjawab"
-
+    jawaban  = search(soal)
     return {'jawaban' : jawaban, 'status':'ok'}
 
 
